@@ -1,0 +1,13 @@
+./squash --url=http://localhost:8001/api/v1/namespaces/squash/services/squash-server:http-squash-api/proxy/api/v2 debug-container shubhim/example:0.1 example-microservice-rc-547k9 example-microservice dlv
+
+
+./squash --url=http://localhost:8001/api/v1/namespaces/squash/services/squash-server:http-squash-api/proxy/api/v2 wait ONRhfKsUOH
+
+
+kubectl port-forward --namespace squash squash-client-g948x 41655
+
+output
+/squash --url=http://localhost:8001/api/v1/namespaces/squash/services/squash-server:http-squash-api/proxy/api/v2 debug-container shubhim/example:0.1 example-microservice-rc-547k9 example-microservice dlv
+Debug config id: ONRhfKsUOH
+shubhis-MacBook-Pro:microservice shubhimittal$ ./squash --url=http://localhost:8001/api/v1/namespaces/squash/services/squash-server:http-squash-api/proxy/api/v2 wait ONRhfKsUOH
+Debug session started! debug server is at: squash-client-g948x.squash:41655

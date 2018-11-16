@@ -1,0 +1,52 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+)
+
+type Calculator struct {
+	Op1, Op2 int
+	IsAdd    bool
+}
+
+func main() {
+	http.HandleFunc("/calculate", calchandler)
+        fmt.Println("In the main function")
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+
+// Example to hit the curl to access the service.
+
+// The -X POST option is optional and can be skipped since from the --data it can be inferred that this is a post call.
+
+// Bug here:
+// Add = false results in addition
+// curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST --data '{"IsAdd":false,"Op1":5, "Op2": 2}' http://172.17.0.5:8080/calculate
+
+// Add = true results in substraction.
+// curl -v -H "Accept: application/json" -H "Content-Type: application/json" --data '{"IsAdd":true,"Op1":5, "Op2": 2}' http://172.17.0.5:8080/calculate
+
+func calchandler(w http.ResponseWriter, r *http.Request) {
+        fmt.Println("In the calchandler function")
+	var req Calculator
+	dec := json.NewDecoder(r.Body)
+	err := dec.Decode(&req)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	isadd := req.IsAdd
+	op1 := req.Op1
+	op2 := req.Op2
+
+	if isadd {
+		fmt.Fprintf(w, "%d", op1-op2)
+	} else {
+		fmt.Fprintf(w, "%d", op1+op2)
+	}
+}
+

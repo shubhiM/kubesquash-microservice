@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: example-microservice-rc
+spec:
+  replicas: 1
+  selector:
+    app: example-microservice
+  template:
+    metadata:
+      labels:
+        app: example-microservice
+    spec:
+      containers:
+      - name: example-microservice
+        image: shubhim/example:0.1
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: example-microservice-svc
+spec:
+  selector:
+    app: example-microservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
